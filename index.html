@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de Nettoyage de Fichiers Excel</title>
+    <title>Formulaire de Nettoyage de Fichiers</title>
     <style>
         * {
             margin: 0;
@@ -13,107 +13,93 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #f8fafc;
             color: #334155;
             line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
         }
 
         .container {
             max-width: 600px;
-            width: 100%;
+            margin: 2rem auto;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
 
         .header {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: #2563eb;
             color: white;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) rotate(180deg); }
         }
 
         .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
         }
 
         .header p {
             opacity: 0.9;
-            font-size: 1.1rem;
-            position: relative;
-            z-index: 1;
+            font-size: 1rem;
         }
 
         .form-content {
-            padding: 2.5rem 2rem;
+            padding: 2rem;
+        }
+
+        .info-section {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-section h3 {
+            color: #0369a1;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-section p {
+            color: #0c4a6e;
+            font-size: 0.9rem;
         }
 
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
             color: #1e293b;
-            font-size: 1rem;
         }
 
         .file-input-wrapper {
             position: relative;
-            display: block;
+            display: inline-block;
             width: 100%;
         }
 
         .file-input {
             width: 100%;
-            padding: 1.25rem 1rem;
+            padding: 0.75rem 1rem;
             border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 8px;
+            background-color: #f8fafc;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             color: #64748b;
-            position: relative;
-            overflow: hidden;
         }
 
         .file-input:hover {
             border-color: #2563eb;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            background-color: #eff6ff;
         }
 
         .file-input input[type="file"] {
@@ -122,195 +108,174 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
-            top: 0;
-            left: 0;
         }
 
         .file-selected {
-            margin-top: 0.75rem;
-            padding: 0.75rem 1rem;
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            border-radius: 8px;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background-color: #eff6ff;
+            border-radius: 6px;
             font-size: 0.9rem;
-            color: #166534;
+            color: #2563eb;
             display: none;
-            border: 1px solid #bbf7d0;
         }
 
         input[type="email"], input[type="text"] {
             width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: white;
+            transition: border-color 0.3s ease;
         }
 
         input[type="email"]:focus, input[type="text"]:focus {
             outline: none;
             border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         button[type="submit"] {
             width: 100%;
-            padding: 1.25rem 2rem;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 1rem 2rem;
+            background: #2563eb;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        button[type="submit"]:hover:not(:disabled) {
-            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-        }
-
-        button[type="submit"]:active:not(:disabled) {
-            transform: translateY(0);
+        button[type="submit"]:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
         }
 
         button[type="submit"]:disabled {
             background: #cbd5e1;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
-        }
-
-        .btn-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
         }
 
         .status-message {
-            margin-top: 1.5rem;
-            padding: 1rem 1.25rem;
-            border-radius: 8px;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
             display: none;
-            font-weight: 500;
         }
 
         .status-success {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            background-color: #dcfce7;
             color: #166534;
             border: 1px solid #bbf7d0;
         }
 
         .status-error {
-            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            background-color: #fef2f2;
             color: #dc2626;
             border: 1px solid #fecaca;
         }
 
-        .download-section {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-radius: 12px;
-            border: 2px solid #0ea5e9;
+        .status-info {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .confirmation-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
             display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .confirmation-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
             text-align: center;
         }
 
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+        .confirmation-content h3 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
 
-        .download-btn:hover {
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        .confirmation-content p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-confirm, .btn-cancel {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .progress-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
         }
 
         .progress-bar {
             width: 100%;
-            height: 4px;
-            background: #e2e8f0;
-            border-radius: 2px;
-            margin-top: 1rem;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
             overflow: hidden;
-            display: none;
+            margin-bottom: 0.5rem;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #2563eb, #1d4ed8);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 2px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            animation: progress-animation 2s infinite linear;
         }
 
-        .file-info {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            border: 1px solid #e2e8f0;
-        }
-
-        .file-info h4 {
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .file-info ul {
-            color: #64748b;
-            font-size: 0.85rem;
-            margin-left: 1.2rem;
-        }
-
-        .file-info li {
-            margin-bottom: 0.25rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .btn-loading {
-            animation: pulse 2s infinite;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 0.5rem;
-                border-radius: 12px;
-            }
-
-            .header {
-                padding: 2rem 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 1.6rem;
-            }
-
-            .form-content {
-                padding: 2rem 1.5rem;
-            }
+        @keyframes progress-animation {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
         }
     </style>
 </head>
@@ -318,17 +283,25 @@
     <div class="container">
         <!-- Header Section -->
         <div class="header">
-            <h1>🗂️ Nettoyage de Fichiers Excel</h1>
-            <p>Uploadez vos fichiers et téléchargez directement le fichier nettoyé</p>
+            <h1>🗂️ Nettoyage de Fichiers</h1>
+            <p>Uploadez vos fichiers et recevez une version nettoyée par email</p>
         </div>
 
         <!-- Form Content -->
         <div class="form-content">
+            <!-- Information Section -->
+            <div class="info-section">
+                <h3>⏱️ Temps de traitement estimé</h3>
+                <p>• Fichiers de 2000 lignes : environ 1h30<br>
+                • Vous recevrez un email de confirmation une fois le traitement terminé<br>
+                • Le workflow s'exécute automatiquement en arrière-plan</p>
+            </div>
+
             <form id="cleaningForm" enctype="multipart/form-data">
                 <!-- Contexte -->
                 <div class="form-group">
-                    <label for="context">🎯 Contexte de la recherche</label>
-                    <input type="text" id="context" name="context" required placeholder="ex: événementiel, marketing, tech...">
+                    <label for="context">📧 Contexte de la recherche</label>
+                    <input type="text" id="context" name="context" required placeholder="ex: événementiel, marketing, etc.">
                 </div>
 
                 <!-- Fichier à nettoyer -->
@@ -336,7 +309,7 @@
                     <label for="fileToClean">📁 Fichier à nettoyer</label>
                     <div class="file-input-wrapper">
                         <div class="file-input">
-                            <input type="file" id="fileToClean" name="fileToClean" required accept=".csv,.xlsx,.xls,.txt">
+                            <input type="file" id="fileToClean" name="fileToClean" required>
                             <span>📤 Cliquez pour sélectionner le fichier à nettoyer</span>
                         </div>
                         <div class="file-selected" id="fileToCleanSelected"></div>
@@ -348,7 +321,7 @@
                     <label for="blacklistFile">🚫 Fichier blacklist</label>
                     <div class="file-input-wrapper">
                         <div class="file-input">
-                            <input type="file" id="blacklistFile" name="blacklistFile" required accept=".csv,.xlsx,.xls,.txt">
+                            <input type="file" id="blacklistFile" name="blacklistFile" required>
                             <span>📤 Cliquez pour sélectionner le fichier blacklist</span>
                         </div>
                         <div class="file-selected" id="blacklistFileSelected"></div>
@@ -361,39 +334,21 @@
                     <input type="email" id="email" name="email" required placeholder="votre.email@exemple.com">
                 </div>
 
-                <!-- Informations sur le processus -->
-                <div class="file-info">
-                    <h4>ℹ️ Informations sur le processus :</h4>
-                    <ul>
-                        <li>Formats acceptés : CSV, Excel (.xlsx, .xls), TXT</li>
-                        <li>Le fichier de sortie sera au format Excel (.xlsx)</li>
-                        <li>Le traitement peut prendre quelques minutes</li>
-                        <li>Le téléchargement se fera automatiquement après traitement</li>
-                        <li>Un email de confirmation vous sera également envoyé</li>
-                    </ul>
-                </div>
-
                 <!-- Bouton de soumission -->
                 <div class="form-group">
                     <button type="submit" id="submitBtn">
-                        <div class="btn-content">
-                            <span class="btn-text">🚀 Lancer le nettoyage</span>
-                            <span class="btn-loading" style="display: none;">⏳ Traitement en cours...</span>
-                        </div>
+                        <span class="btn-text">🚀 Lancer le nettoyage</span>
+                        <span class="btn-loading" style="display: none;">⏳ Traitement en cours...</span>
                     </button>
-                    <div class="progress-bar" id="progressBar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
                 </div>
             </form>
             
-            <!-- Section de téléchargement -->
-            <div class="download-section" id="downloadSection">
-                <h3>✅ Fichier nettoyé avec succès !</h3>
-                <p>Votre fichier a été traité et est prêt à être téléchargé.</p>
-                <a href="#" id="downloadBtn" class="download-btn" download>
-                    📥 Télécharger le fichier nettoyé
-                </a>
+            <!-- Indicateur de progression -->
+            <div class="progress-indicator" id="progressIndicator">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p>🔄 Automatisation en cours... Vous recevrez un email de confirmation</p>
             </div>
             
             <!-- Messages de statut -->
@@ -401,7 +356,24 @@
         </div>
     </div>
 
+    <!-- Dialog de confirmation -->
+    <div class="confirmation-dialog" id="confirmationDialog">
+        <div class="confirmation-content">
+            <h3>🚀 Confirmer le lancement</h3>
+            <p>Vous êtes sur le point de lancer l'automatisation de nettoyage.<br><br>
+            <strong>Temps estimé :</strong> environ 1h30 pour 2000 lignes<br>
+            <strong>Notification :</strong> Vous recevrez un email une fois terminé</p>
+            <div class="confirmation-buttons">
+                <button class="btn-confirm" id="confirmBtn">✅ Confirmer</button>
+                <button class="btn-cancel" id="cancelBtn">❌ Annuler</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Variables globales
+        let formData = null;
+
         // Gestion de l'affichage des fichiers sélectionnés
         function handleFileSelect(inputId, displayId) {
             const input = document.getElementById(inputId);
@@ -410,13 +382,7 @@
             input.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
-                    const fileType = file.name.split('.').pop().toUpperCase();
-                    display.innerHTML = `
-                        <strong>✓ Fichier sélectionné :</strong><br>
-                        📄 ${file.name}<br>
-                        📊 Taille : ${fileSize} MB • Format : ${fileType}
-                    `;
+                    display.textContent = `✓ Fichier sélectionné : ${file.name}`;
                     display.style.display = 'block';
                 } else {
                     display.style.display = 'none';
@@ -428,156 +394,109 @@
         handleFileSelect('fileToClean', 'fileToCleanSelected');
         handleFileSelect('blacklistFile', 'blacklistFileSelected');
 
-        // Animation de la barre de progression
-        function animateProgress() {
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
-            
-            progressBar.style.display = 'block';
-            
-            let width = 0;
-            const interval = setInterval(() => {
-                width += Math.random() * 15;
-                if (width > 90) {
-                    clearInterval(interval);
-                    width = 90;
-                }
-                progressFill.style.width = width + '%';
-            }, 200);
-            
-            return interval;
-        }
-
-        // Fonction pour télécharger le fichier binaire
-        function downloadBinaryFile(blob, filename) {
-            const url = window.URL.createObjectURL(blob);
-            const downloadBtn = document.getElementById('downloadBtn');
-            const downloadSection = document.getElementById('downloadSection');
-            
-            // Configurer le lien de téléchargement
-            downloadBtn.href = url;
-            downloadBtn.download = filename;
-            
-            // Afficher la section de téléchargement
-            downloadSection.style.display = 'block';
-            
-            // Téléchargement automatique (optionnel)
-            // downloadBtn.click();
-            
-            // Nettoyer l'URL après 5 minutes
-            setTimeout(() => {
-                window.URL.revokeObjectURL(url);
-            }, 300000);
-        }
-
-        // Gestion de la soumission du formulaire
-        document.getElementById('cleaningForm').addEventListener('submit', async function(e) {
+        // Gestion de la soumission du formulaire (étape 1 : validation)
+        document.getElementById('cleaningForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Préparer les données du formulaire
+            formData = new FormData();
+            const fileToClean = document.getElementById('fileToClean').files[0];
+            const blacklistFile = document.getElementById('blacklistFile').files[0];
+            const email = document.getElementById('email').value;
+            const context = document.getElementById('context').value;
+            
+            // Ajouter les fichiers et données au FormData
+            formData.append('fileToClean', fileToClean);
+            formData.append('blacklistFile', blacklistFile);
+            formData.append('context', context);
+            formData.append('email', email);
+            
+            // Afficher la dialog de confirmation
+            document.getElementById('confirmationDialog').style.display = 'flex';
+        });
+
+        // Gestion de la confirmation
+        document.getElementById('confirmBtn').addEventListener('click', async function() {
+            // Fermer la dialog
+            document.getElementById('confirmationDialog').style.display = 'none';
+            
+            // Désactiver le bouton et afficher le loading
             const submitBtn = document.getElementById('submitBtn');
             const statusMessage = document.getElementById('statusMessage');
-            const downloadSection = document.getElementById('downloadSection');
+            const progressIndicator = document.getElementById('progressIndicator');
             const btnText = submitBtn.querySelector('.btn-text');
             const btnLoading = submitBtn.querySelector('.btn-loading');
             
-            // Réinitialiser l'affichage
-            downloadSection.style.display = 'none';
-            statusMessage.style.display = 'none';
-            
-            // Désactiver le bouton et afficher le loading
             submitBtn.disabled = true;
             btnText.style.display = 'none';
             btnLoading.style.display = 'inline';
-            
-            // Démarrer l'animation de progression
-            const progressInterval = animateProgress();
+            statusMessage.style.display = 'none';
+            progressIndicator.style.display = 'block';
             
             try {
-                // Préparer les données du formulaire
-                const formData = new FormData();
-                const fileToClean = document.getElementById('fileToClean').files[0];
-                const blacklistFile = document.getElementById('blacklistFile').files[0];
-                const email = document.getElementById('email').value;
-                const context = document.getElementById('context').value;
-                
-                // Validation des fichiers
-                if (!fileToClean || !blacklistFile) {
-                    throw new Error('Veuillez sélectionner tous les fichiers requis');
-                }
-                
-                // Ajouter les données au FormData
-                formData.append('fileToClean', fileToClean);
-                formData.append('blacklistFile', blacklistFile);
-                formData.append('context', context);
-                formData.append('email', email);
-                
-                console.log('📤 Envoi vers webhook...');
-                
-                // Envoyer vers le webhook avec timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minutes timeout
-                
+                // Envoyer vers le webhook
+                console.log('Envoi vers webhook...');
                 const response = await fetch('https://n8n.iatisation.fr/webhook/5b46ebc2-d3b7-488f-a395-13d43017b028', {
                     method: 'POST',
-                    body: formData,
-                    signal: controller.signal
+                    body: formData
                 });
                 
-                clearTimeout(timeoutId);
-                clearInterval(progressInterval);
-                
-                console.log('📥 Réponse:', response.status, response.statusText);
+                console.log('Réponse:', response.status, response.statusText);
                 
                 if (response.ok) {
-                    // Finaliser la barre de progression
-                    document.getElementById('progressFill').style.width = '100%';
-                    
-                    // Récupérer la réponse comme blob (binaire)
-                    const blob = await response.blob();
-                    
-                    // Générer un nom de fichier
-                    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '_');
-                    const filename = `fichier_nettoye_${context}_${timestamp}.xlsx`;
-                    
-                    // Télécharger le fichier
-                    downloadBinaryFile(blob, filename);
-                    
-                    // Afficher un message de succès
+                    // Succès - workflow lancé
                     statusMessage.className = 'status-message status-success';
-                    statusMessage.textContent = '✅ Fichier traité avec succès ! Vous pouvez maintenant le télécharger.';
+                    statusMessage.innerHTML = `
+                        <strong>✅ Automatisation lancée avec succès !</strong><br><br>
+                        📧 Vous recevrez un email de confirmation une fois le traitement terminé<br>
+                        ⏱️ Temps estimé : environ 1h30 pour 2000 lignes<br>
+                        🔄 Le workflow s'exécute maintenant en arrière-plan
+                    `;
                     statusMessage.style.display = 'block';
                     
+                    // Réinitialiser le formulaire
+                    document.getElementById('cleaningForm').reset();
+                    document.getElementById('fileToCleanSelected').style.display = 'none';
+                    document.getElementById('blacklistFileSelected').style.display = 'none';
+                    
+                    // Masquer l'indicateur de progression après 3 secondes
+                    setTimeout(() => {
+                        progressIndicator.style.display = 'none';
+                    }, 3000);
+                    
                 } else {
-                    // Gérer les erreurs HTTP
-                    const errorText = await response.text();
-                    throw new Error(`Erreur ${response.status}: ${errorText || 'Erreur inconnue'}`);
+                    throw new Error('Erreur lors de l\'envoi');
                 }
                 
             } catch (error) {
-                console.error('❌ Erreur:', error);
-                clearInterval(progressInterval);
-                
-                // Masquer la barre de progression
-                document.getElementById('progressBar').style.display = 'none';
-                
-                // Afficher l'erreur
+                // Erreur
+                progressIndicator.style.display = 'none';
                 statusMessage.className = 'status-message status-error';
-                
-                if (error.name === 'AbortError') {
-                    statusMessage.textContent = '⏱️ Timeout : Le traitement prend trop de temps. Veuillez réessayer.';
-                } else if (error.message.includes('Failed to fetch')) {
-                    statusMessage.textContent = '🌐 Erreur de connexion : Vérifiez votre connexion internet et que le serveur n8n est accessible.';
-                } else {
-                    statusMessage.textContent = `⚠️ Erreur : ${error.message}`;
-                }
-                
+                statusMessage.innerHTML = `
+                    <strong>⚠️ Erreur lors du lancement</strong><br>
+                    Vérifiez que le serveur n8n est démarré et réessayez.
+                `;
                 statusMessage.style.display = 'block';
+            } finally {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
             }
-            
-            // Réactiver le bouton
-            submitBtn.disabled = false;
-            btnText.style.display = 'inline';
-            btnLoading.style.display = 'none';
+        });
+
+        // Gestion de l'annulation
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            document.getElementById('confirmationDialog').style.display = 'none';
+            formData = null;
+        });
+
+        // Fermer la dialog en cliquant à l'extérieur
+        document.getElementById('confirmationDialog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                formData = null;
+            }
         });
 
         // Gestion du drag & drop
@@ -597,54 +516,27 @@
             ['dragenter', 'dragover'].forEach(eventName => {
                 wrapper.addEventListener(eventName, () => {
                     wrapper.style.borderColor = '#2563eb';
-                    wrapper.style.background = 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)';
-                    wrapper.style.transform = 'scale(1.02)';
+                    wrapper.style.backgroundColor = '#eff6ff';
                 }, false);
             });
             
             ['dragleave', 'drop'].forEach(eventName => {
                 wrapper.addEventListener(eventName, () => {
                     wrapper.style.borderColor = '#cbd5e1';
-                    wrapper.style.background = 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';
-                    wrapper.style.transform = 'scale(1)';
+                    wrapper.style.backgroundColor = '#f8fafc';
                 }, false);
             });
             
             wrapper.addEventListener('drop', (e) => {
                 const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    input.files = files;
-                    input.dispatchEvent(new Event('change'));
-                }
+                input.files = files;
+                input.dispatchEvent(new Event('change'));
             }, false);
         }
         
         // Activer le drag & drop
         setupDragDrop('fileToClean');
         setupDragDrop('blacklistFile');
-
-        // Validation en temps réel
-        document.getElementById('email').addEventListener('input', function(e) {
-            const email = e.target.value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            
-            if (email && !emailRegex.test(email)) {
-                e.target.style.borderColor = '#dc2626';
-            } else {
-                e.target.style.borderColor = '#e2e8f0';
-            }
-        });
-
-        // Effet de focus amélioré
-        document.querySelectorAll('input, .file-input').forEach(element => {
-            element.addEventListener('focus', function() {
-                this.style.transform = 'translateY(-1px)';
-            });
-            
-            element.addEventListener('blur', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
     </script>
 </body>
 </html>
