@@ -92,29 +92,6 @@
             gap: 0.5rem;
         }
 
-        .input-wrapper {
-            position: relative;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid #bbf7d0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            color: #374151;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #059669;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
-            background: white;
-            transform: translateY(-1px);
-        }
-
         .file-input-wrapper {
             position: relative;
             width: 100%;
@@ -499,14 +476,6 @@
         <!-- Form Content -->
         <div class="form-content">
             <form id="cleaningForm" enctype="multipart/form-data">
-                <!-- Contexte -->
-                <div class="form-group">
-                    <label for="context">🎯 Contexte de la recherche</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="context" name="context" required placeholder="évènementiel">
-                    </div>
-                </div>
-
                 <!-- Fichier à nettoyer -->
                 <div class="form-group">
                     <label for="fileToClean">📁 Fichier à nettoyer</label>
@@ -716,22 +685,19 @@
                 const formData = new FormData();
                 const fileToClean = document.getElementById('fileToClean').files[0];
                 const blacklistFile = document.getElementById('blacklistFile').files[0];
-                const context = document.getElementById('context').value;
                 
                 // Validation côté client
-                if (!fileToClean || !blacklistFile || !context) {
-                    throw new Error('Tous les champs sont obligatoires');
+                if (!fileToClean || !blacklistFile) {
+                    throw new Error('Les deux fichiers sont obligatoires');
                 }
                 
                 // Ajouter les données au FormData
                 formData.append('fileToClean', fileToClean);
                 formData.append('blacklistFile', blacklistFile);
-                formData.append('context', context);
                 
                 console.log('🚀 Envoi vers webhook n8n...');
                 console.log('📊 Fichier à nettoyer:', fileToClean.name);
                 console.log('🛡️ Fichier blacklist:', blacklistFile.name);
-                console.log('🎯 Contexte:', context);
                 
                 // Envoyer vers le webhook et attendre la réponse binaire
                 const response = await fetch('https://n8n.iatisation.fr/webhook/linkforce-cleaner', {
@@ -758,17 +724,17 @@
                     
                     console.log('✅ Fichier Excel reçu:', blob.size, 'bytes');
                     
-                    // Générer un nom de fichier basé sur le contexte et la date
+                    // Générer un nom de fichier basé sur le fichier original et la date
                     const timestamp = new Date().toISOString().slice(0, 16).replace(/[:-]/g, '');
-                    const cleanedContext = context.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
-                    const filename = `${cleanedContext}_nettoye_${timestamp}.xlsx`;
+                    const originalName = fileToClean.name.replace(/\.[^/.]+$/, "");
+                    const cleanedName = originalName.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                    const filename = `${cleanedName}_nettoye_${timestamp}.xlsx`;
                     
                     // Stocker le blob et le nom de fichier pour le téléchargement
                     window.downloadData = {
                         blob: blob,
                         filename: filename,
                         originalFile: fileToClean.name,
-                        context: context,
                         size: fileSize
                     };
                     
@@ -829,8 +795,7 @@
                     <div style="margin-bottom: 0.5rem;"><strong>${window.downloadData.filename}</strong></div>
                     <div class="file-size">
                         Taille: ${window.downloadData.size} KB • 
-                        Fichier original: ${window.downloadData.originalFile} • 
-                        Contexte: ${window.downloadData.context}
+                        Fichier original: ${window.downloadData.originalFile}
                     </div>
                 `;
                 fileInfo.style.display = 'block';
@@ -912,7 +877,7 @@
             delete window.downloadData;
             
             // Remettre le focus sur le premier champ
-            document.getElementById('context').focus();
+            document.getElementById('fileToClean').focus();
             
             console.log('🔄 Formulaire réinitialisé pour un nouveau nettoyage');
         }
@@ -924,13 +889,12 @@
                 return;
             }
             
-            const subject = encodeURIComponent(`Fichier Excel nettoyé - ${window.downloadData.context}`);
+            const subject = encodeURIComponent(`Fichier Excel nettoyé`);
             const body = encodeURIComponent(`Bonjour,
 
 Je partage avec vous le fichier Excel nettoyé :
 
 📁 Fichier original : ${window.downloadData.originalFile}
-🎯 Contexte : ${window.downloadData.context}
 📊 Fichier nettoyé : ${window.downloadData.filename}
 💾 Taille : ${window.downloadData.size} KB
 🕒 Traité le : ${new Date().toLocaleString('fr-FR')}
@@ -951,7 +915,7 @@ Cordialement`);
 
         // Amélioration : Auto-focus sur le premier champ au chargement
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('context').focus();
+            document.getElementById('fileToClean').focus();
         });
 
         // Gestion des erreurs JavaScript globales
