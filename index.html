@@ -470,7 +470,7 @@
         <!-- Header Section -->
         <div class="header">
             <h1>🗂️ Nettoyage de Fichiers</h1>
-            <p>Uploadez vos fichiers et téléchargez directement la version nettoyée</p>
+            <p>Uploadez votre fichier et téléchargez directement la version nettoyée</p>
         </div>
 
         <!-- Form Content -->
@@ -489,22 +489,6 @@
                             </div>
                         </div>
                         <div class="file-selected" id="fileToCleanSelected"></div>
-                    </div>
-                </div>
-
-                <!-- Fichier blacklist -->
-                <div class="form-group">
-                    <label for="blacklistFile">🚫 Fichier blacklist</label>
-                    <div class="file-input-wrapper">
-                        <div class="file-input">
-                            <input type="file" id="blacklistFile" name="blacklistFile" required accept=".xlsx,.xls,.csv,.txt">
-                            <div class="file-input-content">
-                                <div class="file-icon">🛡️</div>
-                                <div class="file-text">Cliquez pour sélectionner le fichier blacklist</div>
-                                <div class="file-subtext">ou glissez-déposez votre fichier ici</div>
-                            </div>
-                        </div>
-                        <div class="file-selected" id="blacklistFileSelected"></div>
                     </div>
                 </div>
 
@@ -530,20 +514,20 @@
             <div class="download-section" id="downloadSection">
                 <div class="download-title">
                     <span>📥</span>
-                    <span>Fichier Excel nettoyé prêt !</span>
+                    <span>Fichier CSV nettoyé prêt !</span>
                 </div>
                 <div class="download-info">
-                    <span class="excel-icon">XL</span>
+                    <span class="excel-icon">CSV</span>
                     <span>Votre fichier nettoyé est prêt à être téléchargé</span>
                 </div>
                 <button id="downloadBtn" class="download-btn">
                     <span>📥</span>
-                    <span>Télécharger le fichier Excel (.xlsx)</span>
+                    <span>Télécharger le fichier CSV (.csv)</span>
                 </button>
                 
                 <div class="file-info" id="fileInfo" style="display: none;">
                     <h4>
-                        <span class="excel-icon">XL</span>
+                        <span class="excel-icon">CSV</span>
                         <span>Informations du fichier :</span>
                     </h4>
                     <div id="fileDetails"></div>
@@ -663,11 +647,9 @@
 
         // Initialiser la gestion des fichiers
         handleFileSelect('fileToClean', 'fileToCleanSelected');
-        handleFileSelect('blacklistFile', 'blacklistFileSelected');
         
         // Activer le drag & drop
         setupDragDrop('fileToClean');
-        setupDragDrop('blacklistFile');
 
         // Gestion de la soumission du formulaire
         document.getElementById('cleaningForm').addEventListener('submit', async function(e) {
@@ -684,27 +666,24 @@
                 // Préparer les données du formulaire
                 const formData = new FormData();
                 const fileToClean = document.getElementById('fileToClean').files[0];
-                const blacklistFile = document.getElementById('blacklistFile').files[0];
                 
                 // Validation côté client
-                if (!fileToClean || !blacklistFile) {
-                    throw new Error('Les deux fichiers sont obligatoires');
+                if (!fileToClean) {
+                    throw new Error('Le fichier est obligatoire');
                 }
                 
                 // Ajouter les données au FormData
                 formData.append('fileToClean', fileToClean);
-                formData.append('blacklistFile', blacklistFile);
                 
                 console.log('🚀 Envoi vers webhook n8n...');
                 console.log('📊 Fichier à nettoyer:', fileToClean.name);
-                console.log('🛡️ Fichier blacklist:', blacklistFile.name);
                 
                 // Envoyer vers le webhook et attendre la réponse binaire
                 const response = await fetch('https://n8n.iatisation.fr/webhook/linkforce-cleaner', {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,*/*'
+                        'Accept': 'text/csv,application/csv,*/*'
                     }
                 });
                 
@@ -712,23 +691,23 @@
                 console.log('📄 Type de contenu:', response.headers.get('content-type'));
                 
                 if (response.ok) {
-                    // Vérifier que c'est bien un fichier Excel
+                    // Vérifier que c'est bien un fichier CSV
                     const contentType = response.headers.get('content-type');
-                    if (!contentType || (!contentType.includes('spreadsheet') && !contentType.includes('excel') && !contentType.includes('application/octet-stream'))) {
+                    if (!contentType || (!contentType.includes('csv') && !contentType.includes('text/plain') && !contentType.includes('application/octet-stream'))) {
                         console.warn('⚠️ Type de contenu inattendu:', contentType);
                     }
                     
-                    // Récupérer le blob du fichier Excel
+                    // Récupérer le blob du fichier CSV
                     const blob = await response.blob();
                     const fileSize = (blob.size / 1024).toFixed(1);
                     
-                    console.log('✅ Fichier Excel reçu:', blob.size, 'bytes');
+                    console.log('✅ Fichier CSV reçu:', blob.size, 'bytes');
                     
                     // Générer un nom de fichier basé sur le fichier original et la date
                     const timestamp = new Date().toISOString().slice(0, 16).replace(/[:-]/g, '');
                     const originalName = fileToClean.name.replace(/\.[^/.]+$/, "");
                     const cleanedName = originalName.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
-                    const filename = `${cleanedName}_nettoye_${timestamp}.xlsx`;
+                    const filename = `${cleanedName}_nettoye_${timestamp}.csv`;
                     
                     // Stocker le blob et le nom de fichier pour le téléchargement
                     window.downloadData = {
@@ -747,7 +726,7 @@
                             <div style="width: 40px; height: 40px; background: #059669; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; font-weight: bold;">✓</div>
                             <div>
                                 <div style="font-weight: 600; margin-bottom: 0.25rem;">Nettoyage terminé avec succès !</div>
-                                <div style="opacity: 0.9;">Votre fichier Excel nettoyé est prêt à être téléchargé.</div>
+                                <div style="opacity: 0.9;">Votre fichier CSV nettoyé est prêt à être téléchargé.</div>
                             </div>
                         </div>
                     `, 'success');
@@ -815,9 +794,9 @@
             try {
                 console.log('💾 Début du téléchargement:', window.downloadData.filename);
                 
-                // Créer un blob avec le bon type MIME pour Excel
+                // Créer un blob avec le bon type MIME pour CSV
                 const blob = new Blob([window.downloadData.blob], { 
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                    type: 'text/csv' 
                 });
                 
                 // Créer le lien de téléchargement
@@ -867,7 +846,6 @@
             // Réinitialiser le formulaire
             document.getElementById('cleaningForm').reset();
             document.getElementById('fileToCleanSelected').style.display = 'none';
-            document.getElementById('blacklistFileSelected').style.display = 'none';
             
             // Masquer les sections de résultat
             document.getElementById('statusMessage').style.display = 'none';
@@ -889,10 +867,10 @@
                 return;
             }
             
-            const subject = encodeURIComponent(`Fichier Excel nettoyé`);
+            const subject = encodeURIComponent(`Fichier CSV nettoyé`);
             const body = encodeURIComponent(`Bonjour,
 
-Je partage avec vous le fichier Excel nettoyé :
+Je partage avec vous le fichier CSV nettoyé :
 
 📁 Fichier original : ${window.downloadData.originalFile}
 📊 Fichier nettoyé : ${window.downloadData.filename}
